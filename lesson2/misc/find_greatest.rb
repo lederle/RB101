@@ -1,13 +1,13 @@
+# frozen_string_literal: true
+
 def find_greatest(numbers)
   saved_number = nil
 
   numbers.each do |num|
     saved_number ||= num
-    if saved_number >= num
-      next
-    else
-      saved_number = num
-    end
+    next if saved_number >= num
+
+    saved_number = num
   end
   saved_number
 end
