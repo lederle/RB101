@@ -25,6 +25,12 @@ class Calculator
     writer.ask_for_number
   end
 
+  class Reader
+    def self.read(is = $stdin)
+      is.gets.chomp
+    end
+  end
+
   class Writer
     def self.display_banner(os = $stdout)
       os.puts 'Welcome to Calculator!'
@@ -37,6 +43,21 @@ class Calculator
 end
 
 require 'minitest/autorun'
+class ReaderTest < Minitest::Test
+  def read(input)
+    @stream = StringIO.new input
+    Calculator::Reader.read @stream
+  end
+
+  def test_a_number
+    assert_equal '3', read('3')
+  end
+
+  def test_not_a_number
+    assert_equal 'm', read('m')
+  end
+end
+
 class WriterTest < Minitest::Test
   def setup
     @stream = StringIO.new
