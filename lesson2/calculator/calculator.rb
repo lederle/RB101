@@ -20,7 +20,8 @@
 # puts result
 
 class Calculator
-  def self.compute(reader, writer)
+  def self.compute(reader, writer = Writer)
+    writer.display_banner
   end
 
   class Writer
@@ -63,6 +64,8 @@ class CalculatorTest < Minitest::Test
   end
 
   class MockWriter
+    def display_banner
+  end
 
   end
 end
