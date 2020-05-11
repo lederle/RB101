@@ -22,11 +22,16 @@
 class Calculator
   def self.compute(reader, writer = Writer)
     writer.display_banner
+    writer.ask_for_number
   end
 
   class Writer
     def self.display_banner(os = $stdout)
       os.puts 'Welcome to Calculator!'
+    end
+
+    def self.ask_for_number(os = $stdout)
+      os.puts "What's the first number?"
     end
   end
 end
@@ -43,6 +48,15 @@ class WriterTest < Minitest::Test
     @stream.rewind
     expected =<<~OUT
       Welcome to Calculator!
+    OUT
+    assert_equal expected, @stream.read
+  end
+
+  def test_ask_for_number
+    @writer.ask_for_number @stream
+    @stream.rewind
+    expected =<<~OUT
+      What's the first number?
     OUT
     assert_equal expected, @stream.read
   end
@@ -65,7 +79,10 @@ class CalculatorTest < Minitest::Test
 
   class MockWriter
     def display_banner
-  end
+    end
+
+    def ask_for_number
+    end
 
   end
 end
