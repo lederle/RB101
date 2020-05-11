@@ -20,9 +20,10 @@
 # puts result
 
 class Calculator
-  def self.compute(reader, writer = Writer)
+  def self.compute(reader = Reader, writer = Writer)
     writer.display_banner
     writer.ask_for_number
+    num1 = reader.read
   end
 
   class Reader
@@ -96,6 +97,10 @@ class CalculatorTest < Minitest::Test
 
   class MockReader
     attr_accessor :responses
+
+    def read
+      responses.shift
+    end
   end
 
   class MockWriter
