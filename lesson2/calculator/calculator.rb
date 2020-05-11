@@ -25,6 +25,7 @@ class Calculator
 
   class Writer
     def self.display_banner(os = $stdout)
+      os.puts 'Welcome to Calculator!'
     end
   end
 end
