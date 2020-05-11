@@ -37,8 +37,8 @@ class Calculator
       os.puts 'Welcome to Calculator!'
     end
 
-    def self.ask_for_number(os = $stdout)
-      os.puts "What's the first number?"
+    def self.ask_for_number(os = $stdout, term)
+      os.puts "What's the #{term.to_s} number?"
     end
   end
 end
@@ -74,11 +74,20 @@ class WriterTest < Minitest::Test
     assert_equal expected, @stream.read
   end
 
-  def test_ask_for_number
-    @writer.ask_for_number @stream
+  def test_ask_for_first_number
+    @writer.ask_for_number @stream, :first
     @stream.rewind
     expected =<<~OUT
       What's the first number?
+    OUT
+    assert_equal expected, @stream.read
+  end
+
+  def test_ask_for_second_number
+    @writer.ask_for_number @stream, :second
+    @stream.rewind
+    expected =<<~OUT
+      What's the second number?
     OUT
     assert_equal expected, @stream.read
   end
