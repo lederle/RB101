@@ -22,9 +22,29 @@
 class Calculator
   def self.compute(reader, writer)
   end
+
+  class Writer
+    def self.display_banner(os = $stdout)
+    end
+  end
 end
 
 require 'minitest/autorun'
+class WriterTest < Minitest::Test
+  def setup
+    @stream = StringIO.new
+    @writer = Calculator::Writer
+  end
+
+  def test_display_banner
+    @writer.display_banner @stream
+    @stream.rewind
+    expected =<<~OUT
+      Welcome to Calculator!
+    OUT
+    assert_equal expected, @stream.read
+  end
+end
 
 class CalculatorTest < Minitest::Test
   def setup
