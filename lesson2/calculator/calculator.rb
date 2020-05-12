@@ -51,6 +51,10 @@ class Calculator
     def self.ask_for_operation(os = $stdout)
       os.puts "What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide"
     end
+
+    def self.display_result(os = $stdout, res)
+      os.puts "The result is #{res}"
+    end
   end
 end
 
@@ -120,6 +124,16 @@ class WriterTest < Minitest::Test
     OUT
     assert_equal expected, @stream.read
   end
+
+  def test_display_result
+    res = 22
+    @writer.display_result @stream, res
+    @stream.rewind
+    expected =<<~OUT
+      The result is 22
+    OUT
+    assert_equal expected, @stream.read
+  end
 end
 
 class CalculatorTest < Minitest::Test
@@ -129,7 +143,7 @@ class CalculatorTest < Minitest::Test
   end
 
   def test_happy
-    @reader.responses = [1, 2, '1']
+    @reader.responses = ['1', '2', '1']
     assert_equal 3, Calculator.compute(@reader, @writer)
   end
 
@@ -153,6 +167,9 @@ class CalculatorTest < Minitest::Test
     end
 
     def ask_for_operation
+    end
+
+    def display_result res
     end
   end
 end
