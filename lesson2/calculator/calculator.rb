@@ -22,8 +22,9 @@
 class Calculator
   def self.compute(reader = Reader, writer = Writer)
     writer.display_banner
-    writer.ask_for_number
+    writer.ask_for_number(:first)
     num1 = reader.read
+    writer.ask_for_number(:second)
   end
 
   class Reader
@@ -116,7 +117,7 @@ class CalculatorTest < Minitest::Test
     def display_banner
     end
 
-    def ask_for_number
+    def ask_for_number(term)
     end
 
   end
