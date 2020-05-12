@@ -27,6 +27,12 @@ class Calculator
     writer.ask_for_number(:second)
     num2 = reader.read_num
     writer.ask_for_operation
+    operation = reader.read_op
+    if operation == '1'
+      res = num1.to_i + num2.to_i
+      writer.display_result res
+      return res
+    end
   end
 
   class Reader
