@@ -25,6 +25,8 @@ class Calculator
     writer.ask_for_number(:first)
     num1 = reader.read
     writer.ask_for_number(:second)
+    num2 = reader.read
+    writer.ask_for_operation
   end
 
   class Reader
@@ -40,6 +42,10 @@ class Calculator
 
     def self.ask_for_number(os = $stdout, term)
       os.puts "What's the #{term.to_s} number?"
+    end
+
+    def self.ask_for_operation(os = $stdout)
+      os.puts "What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide"
     end
   end
 end
@@ -92,6 +98,15 @@ class WriterTest < Minitest::Test
     OUT
     assert_equal expected, @stream.read
   end
+
+  def test_ask_for_operation
+    @writer.ask_for_operation @stream
+    @stream.rewind
+    expected =<<~OUT
+      What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide
+    OUT
+    assert_equal expected, @stream.read
+  end
 end
 
 class CalculatorTest < Minitest::Test
@@ -120,5 +135,7 @@ class CalculatorTest < Minitest::Test
     def ask_for_number(term)
     end
 
+    def ask_for_operation
+    end
   end
 end
