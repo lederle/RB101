@@ -33,6 +33,10 @@ class Calculator
     def self.read_num(is = $stdin)
       is.gets.chomp
     end
+
+    def self.read_op(is = $stdin)
+      is.gets.chomp
+    end 
   end
 
   class Writer
@@ -57,12 +61,21 @@ class ReaderTest < Minitest::Test
     Calculator::Reader.read_num @stream
   end
 
+  def read_op(input)
+    @stream = StringIO.new input
+    Calculator::Reader.read_op @stream
+  end
+
   def test_read_a_number
     assert_equal '10', read_num('10')
   end
 
   def test_read_not_a_number
     assert_equal 'm', read_num('m')
+  end
+
+  def test_read_an_op
+    assert_equal '1', read_op('1')
   end
 end
 
@@ -124,6 +137,10 @@ class CalculatorTest < Minitest::Test
     attr_accessor :responses
 
     def read_num
+      responses.shift
+    end
+
+    def read_op
       responses.shift
     end
   end
