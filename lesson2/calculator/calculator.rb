@@ -23,14 +23,14 @@ class Calculator
   def self.compute(reader = Reader, writer = Writer)
     writer.display_banner
     writer.ask_for_number(:first)
-    num1 = reader.read
+    num1 = reader.read_num
     writer.ask_for_number(:second)
-    num2 = reader.read
+    num2 = reader.read_num
     writer.ask_for_operation
   end
 
   class Reader
-    def self.read(is = $stdin)
+    def self.read_num(is = $stdin)
       is.gets.chomp
     end
   end
@@ -52,17 +52,17 @@ end
 
 require 'minitest/autorun'
 class ReaderTest < Minitest::Test
-  def read(input)
+  def read_num(input)
     @stream = StringIO.new input
-    Calculator::Reader.read @stream
+    Calculator::Reader.read_num @stream
   end
 
-  def test_a_number
-    assert_equal '3', read('3')
+  def test_read_a_number
+    assert_equal '10', read_num('10')
   end
 
-  def test_not_a_number
-    assert_equal 'm', read('m')
+  def test_read_not_a_number
+    assert_equal 'm', read_num('m')
   end
 end
 
@@ -123,7 +123,7 @@ class CalculatorTest < Minitest::Test
   class MockReader
     attr_accessor :responses
 
-    def read
+    def read_num
       responses.shift
     end
   end
