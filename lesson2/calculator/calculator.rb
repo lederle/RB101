@@ -29,10 +29,25 @@ class Calculator
     writer.ask_for_operation
     operation = reader.read_op
     if operation == '1'
-      res = num1.to_i + num2.to_i
-      writer.display_result res
-      return res
+      writer.display_result calculate(num1, num2, :+)
+    elsif operation == '2'
+      writer.display_result calculate(num1, num2, :-)
+    elsif operation == '3'
+      writer.display_result calculate(num1, num2, :*)
+    elsif operation == '4'
+      writer.display_result calculate(num1, num2, :/)
     end
+  end
+
+  def self.calculate(num1, num2, oper)
+    if oper.to_s == '/'
+      num1 = num1.to_f
+      num2 = num2.to_f
+    else
+      num1 = num1.to_i
+      num2 = num2.to_i
+    end
+    num1.send(oper, num2)
   end
 
   class Reader
@@ -60,6 +75,7 @@ class Calculator
 
     def self.display_result(os = $stdout, res)
       os.puts "The result is #{res}"
+      res
     end
   end
 end
@@ -133,12 +149,13 @@ class WriterTest < Minitest::Test
 
   def test_display_result
     res = 22
-    @writer.display_result @stream, res
+    out = @writer.display_result @stream, res
     @stream.rewind
     expected =<<~OUT
       The result is 22
     OUT
     assert_equal expected, @stream.read
+    assert_equal 22, out
   end
 end
 
@@ -149,8 +166,35 @@ class CalculatorTest < Minitest::Test
   end
 
   def test_happy
-    @reader.responses = ['1', '2', '1']
+    @reader.responses = %w[1, 2, 1]
     assert_equal 3, Calculator.compute(@reader, @writer)
+  end
+
+  def test_subtract
+    @reader.responses = %w[23, 12, 2]
+    assert_equal 11, Calculator.compute(@reader, @writer)
+  end
+
+  def test_product
+    @reader.responses = %w[23, 2, 3]
+    assert_equal 46, Calculator.compute(@reader, @writer)
+  end
+
+  def test_quotient
+    @reader.responses = %w[23, 2, 4]
+    assert_equal 11.5, Calculator.compute(@reader, @writer)
+  end
+
+  def test_noop
+    @reader.responses = %w[23, 2, 999]
+    assert_nil Calculator.compute(@reader, @writer)
+  end
+
+  def test_calculate
+    assert_equal 2, Calculator.calculate('1', '1', :+)  
+    assert_equal 0, Calculator.calculate('1', '1', :-)
+    assert_equal 1, Calculator.calculate('1', '1', :*)
+    assert_equal 1.0, Calculator.calculate('1', '1', :/)
   end
 
   class MockReader
@@ -176,6 +220,7 @@ class CalculatorTest < Minitest::Test
     end
 
     def display_result res
+      res
     end
   end
 end
