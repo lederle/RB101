@@ -2,64 +2,62 @@
 # try to remove as much class machinery as possible
 # i.e., conform to LS pedagogy at this point
 
-class Calculator
-  def self.compute(reader = Reader, writer = Writer)
-    writer.display_banner
-    writer.ask_for_number(:first)
-    num1 = reader.read_num
-    writer.ask_for_number(:second)
-    num2 = reader.read_num
-    writer.ask_for_operation
-    operation = reader.read_op
-    if operation == '1'
-      writer.display_result calculate(num1, num2, :+)
-    elsif operation == '2'
-      writer.display_result calculate(num1, num2, :-)
-    elsif operation == '3'
-      writer.display_result calculate(num1, num2, :*)
-    elsif operation == '4'
-      writer.display_result calculate(num1, num2, :/)
-    end
+def calculator(reader = Reader, writer = Writer)
+  writer.display_banner
+  writer.ask_for_number(:first)
+  num1 = reader.read_num
+  writer.ask_for_number(:second)
+  num2 = reader.read_num
+  writer.ask_for_operation
+  operation = reader.read_op
+  if operation == '1'
+    writer.display_result calculate(num1, num2, :+)
+  elsif operation == '2'
+    writer.display_result calculate(num1, num2, :-)
+  elsif operation == '3'
+    writer.display_result calculate(num1, num2, :*)
+  elsif operation == '4'
+    writer.display_result calculate(num1, num2, :/)
+  end
+end
+
+def calculate(num1, num2, oper)
+  if oper.to_s == '/'
+    num1 = num1.to_f
+    num2 = num2.to_f
+  else
+    num1 = num1.to_i
+    num2 = num2.to_i
+  end
+  num1.send(oper, num2)
+end
+
+class Reader
+  def self.read_num(is = $stdin)
+    is.gets.chomp
   end
 
-  def self.calculate(num1, num2, oper)
-    if oper.to_s == '/'
-      num1 = num1.to_f
-      num2 = num2.to_f
-    else
-      num1 = num1.to_i
-      num2 = num2.to_i
-    end
-    num1.send(oper, num2)
+  def self.read_op(is = $stdin)
+    is.gets.chomp
+  end
+end
+
+class Writer
+  def self.display_banner(os = $stdout)
+    os.puts 'Welcome to Calculator!'
   end
 
-  class Reader
-    def self.read_num(is = $stdin)
-      is.gets.chomp
-    end
-
-    def self.read_op(is = $stdin)
-      is.gets.chomp
-    end 
+  def self.ask_for_number(os = $stdout, term)
+    os.puts "What's the #{term.to_s} number?"
   end
 
-  class Writer
-    def self.display_banner(os = $stdout)
-      os.puts 'Welcome to Calculator!'
-    end
+  def self.ask_for_operation(os = $stdout)
+    os.puts "What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide"
+  end
 
-    def self.ask_for_number(os = $stdout, term)
-      os.puts "What's the #{term.to_s} number?"
-    end
-
-    def self.ask_for_operation(os = $stdout)
-      os.puts "What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide"
-    end
-
-    def self.display_result(os = $stdout, res)
-      os.puts "The result is #{res}"
-      res
-    end
+  def self.display_result(os = $stdout, res)
+    os.puts "The result is #{res}"
+    res
   end
 end
 
@@ -67,12 +65,12 @@ require 'minitest/autorun'
 class ReaderTest < Minitest::Test
   def read_num(input)
     @stream = StringIO.new input
-    Calculator::Reader.read_num @stream
+    Reader.read_num @stream
   end
 
   def read_op(input)
     @stream = StringIO.new input
-    Calculator::Reader.read_op @stream
+    Reader.read_op @stream
   end
 
   def test_read_a_number
@@ -91,7 +89,7 @@ end
 class WriterTest < Minitest::Test
   def setup
     @stream = StringIO.new
-    @writer = Calculator::Writer
+    @writer = Writer
   end
 
   def test_display_banner
@@ -150,34 +148,34 @@ class CalculatorTest < Minitest::Test
 
   def test_happy
     @reader.responses = %w[1, 2, 1]
-    assert_equal 3, Calculator.compute(@reader, @writer)
+    assert_equal 3, calculator(@reader, @writer)
   end
 
   def test_subtract
     @reader.responses = %w[23, 12, 2]
-    assert_equal 11, Calculator.compute(@reader, @writer)
+    assert_equal 11, calculator(@reader, @writer)
   end
 
   def test_product
     @reader.responses = %w[23, 2, 3]
-    assert_equal 46, Calculator.compute(@reader, @writer)
+    assert_equal 46, calculator(@reader, @writer)
   end
 
   def test_quotient
     @reader.responses = %w[23, 2, 4]
-    assert_equal 11.5, Calculator.compute(@reader, @writer)
+    assert_equal 11.5, calculator(@reader, @writer)
   end
 
   def test_noop
     @reader.responses = %w[23, 2, 999]
-    assert_nil Calculator.compute(@reader, @writer)
+    assert_nil calculator(@reader, @writer)
   end
 
   def test_calculate
-    assert_equal 2, Calculator.calculate('1', '1', :+)  
-    assert_equal 0, Calculator.calculate('1', '1', :-)
-    assert_equal 1, Calculator.calculate('1', '1', :*)
-    assert_equal 1.0, Calculator.calculate('1', '1', :/)
+    assert_equal 2, calculate('1', '1', :+)
+    assert_equal 0, calculate('1', '1', :-)
+    assert_equal 1, calculate('1', '1', :*)
+    assert_equal 1.0, calculate('1', '1', :/)
   end
 
   class MockReader
