@@ -8,13 +8,14 @@ def calculator(reader = Reader, writer = Writer)
   num2 = reader.read_num
   writer.ask_for_operation
   operation = reader.read_op
-  if operation == '1'
+  case operation
+  when '1'
     writer.display_result calculate(num1, num2, :+)
-  elsif operation == '2'
+  when '2'
     writer.display_result calculate(num1, num2, :-)
-  elsif operation == '3'
+  when '3'
     writer.display_result calculate(num1, num2, :*)
-  elsif operation == '4'
+  when '4'
     writer.display_result calculate(num1, num2, :/)
   end
 end
