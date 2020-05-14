@@ -39,7 +39,8 @@ end
 # calculator.
 class Reader
   def self.read_num(i_stream = $stdin)
-    i_stream.gets.chomp
+    input = i_stream.gets.chomp
+    valid?(input) && input
   end
 
   def self.read_op(i_stream = $stdin)
@@ -47,6 +48,13 @@ class Reader
   end
 end
 
+class << Reader
+  private
+
+  def valid?(num)
+    num.to_i != 0
+  end
+end
 # Writer is a helper class for the calculator
 # function. The default parameter is $stdout
 # but its main reason to be is to allow a
@@ -112,7 +120,7 @@ class ReaderTest < Minitest::Test
   end
 
   def test_read_not_a_number
-    assert_equal 'm', read_num('m')
+    refute read_num('m')
   end
 
   def test_read_an_op
