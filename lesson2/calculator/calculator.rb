@@ -50,7 +50,7 @@ end
 # function. The default parameter is $stdout
 # but its main reason to be is to allow a
 # fake writer to by substituted during testing.
-# It performs the puts (and related) operations
+# It performs the puts-related operations
 # for calculator.
 class Writer
   def self.display_banner(o_stream = $stdout)
@@ -164,7 +164,7 @@ end
 # overall behavior of the calculator
 # is what is interesting, not the line
 # to line IO (ReaderTest and WriterTest
-# do that). DIY Mocks are used (I am
+# do that). DIY mocks are used (I am
 # still a little confused by Minitest::Mocks
 # honestly), we are mostly interested
 # in the return value from calculator.
