@@ -54,21 +54,41 @@ end
 # for calculator.
 class Writer
   def self.display_banner(o_stream = $stdout)
-    o_stream.puts 'Welcome to Calculator!'
+    o_stream.puts decorate('Welcome to Calculator!')
   end
 
   def self.ask_for_number(o_stream = $stdout, term)
     # Note to self: symbol auto converts to string
-    o_stream.puts "What's the #{term} number?"
+    o_stream.puts decorate("What's the #{term} number?")
   end
 
   def self.ask_for_operation(o_stream = $stdout)
-    o_stream.puts 'What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide'
+    o_stream.puts decorate('What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide')
   end
 
   def self.display_result(o_stream = $stdout, res)
-    o_stream.puts "The result is #{res}"
+    o_stream.puts decorate("The result is #{res}")
     res
+  end
+end
+
+# This is a semi-hack for now, it creates a private
+# class method. My intent was to add decorate
+# as a private instance method and just use
+# it within Writer, but I get NoMethodError
+# when used this way, I'm not understanding
+# something about class methods and I can't
+# ferret out an SO post that covers this
+# particular situation. The hack does provide the
+# desired intent, no one can use decorate except
+# Writer members. Why? I didn't like the idea of
+# calculator using decorate, it feels more
+# appropriate in the domain of Writer.
+class << Writer
+  private
+
+  def decorate(message)
+    '=> ' + message
   end
 end
 
@@ -115,7 +135,7 @@ class WriterTest < Minitest::Test
     @writer.display_banner @stream
     @stream.rewind
     expected = <<~OUT
-      Welcome to Calculator!
+      => Welcome to Calculator!
     OUT
     assert_equal expected, @stream.read
   end
@@ -124,7 +144,7 @@ class WriterTest < Minitest::Test
     @writer.ask_for_number @stream, :first
     @stream.rewind
     expected = <<~OUT
-      What's the first number?
+      => What's the first number?
     OUT
     assert_equal expected, @stream.read
   end
@@ -133,7 +153,7 @@ class WriterTest < Minitest::Test
     @writer.ask_for_number @stream, :second
     @stream.rewind
     expected = <<~OUT
-      What's the second number?
+      => What's the second number?
     OUT
     assert_equal expected, @stream.read
   end
@@ -142,7 +162,7 @@ class WriterTest < Minitest::Test
     @writer.ask_for_operation @stream
     @stream.rewind
     expected = <<~OUT
-      What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide
+      => What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide
     OUT
     assert_equal expected, @stream.read
   end
@@ -152,7 +172,7 @@ class WriterTest < Minitest::Test
     out = @writer.display_result @stream, res
     @stream.rewind
     expected = <<~OUT
-      The result is 22
+      => The result is 22
     OUT
     assert_equal expected, @stream.read
     assert_equal 22, out
