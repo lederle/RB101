@@ -2,6 +2,8 @@
 
 require 'pry'
 
+# do arithmetic on two numbers, over and over
+# if you want
 def calculator(reader = Reader, writer = Writer)
   ret = []
   writer.display_banner
@@ -33,6 +35,7 @@ def calculator(reader = Reader, writer = Writer)
     new_calc = reader.read_new_calc
     break unless new_calc == 'y'
   end
+  writer.display_goodbye
   ret
 end
 
@@ -107,6 +110,10 @@ class Writer
 
   def self.ask_for_new_calc(o_stream = $stdout)
     o_stream.puts decorate('Do you want to perform another calculation? (Y to calculate again)')
+  end
+
+  def self.display_goodbye(o_stream = $stdout)
+    o_stream.puts decorate('Thank you for using the calculator. Good bye!')
   end
 end
 
@@ -262,6 +269,15 @@ class WriterTest < Minitest::Test
     OUT
     assert_equal expected, @stream.read
   end
+
+  def test_display_goodbye
+    @writer.display_goodbye @stream
+    @stream.rewind
+    expected = <<~OUT
+      => Thank you for using the calculator. Good bye!
+    OUT
+    assert_equal expected, @stream.read
+  end
 end
 
 # Test the calculator; I consider these
@@ -406,5 +422,7 @@ class CalculatorTest < Minitest::Test
     def display_invalid_number; end
 
     def ask_for_new_calc; end
+
+    def display_goodbye; end
   end
 end
