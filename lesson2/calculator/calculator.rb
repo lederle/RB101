@@ -10,7 +10,10 @@ def calculator(reader = Reader, writer = Writer)
     writer.ask_for_number(:first)
   end
   writer.ask_for_number(:second)
-  num2 = reader.read_num
+  until (num2 = reader.read_num)
+    writer.display_invalid_number
+    writer.ask_for_number(:second)
+  end
   writer.ask_for_operation
   operation = reader.read_op
   case operation
@@ -256,10 +259,28 @@ class CalculatorTest < Minitest::Test
     assert_equal 3, @reader.num_read_count
   end
 
+  def test_bad_input_second_number
+    @reader.responses = %w[23 nan 2 1]
+    assert_equal 25, calculator(@reader, @writer)
+    assert_equal 3, @reader.num_read_count
+  end
+
   def test_multiple_bad_input_first_number
     @reader.responses = %w[ds sdf sdf sdf ff nan 23 2 1]
     assert_equal 25, calculator(@reader, @writer)
     assert_equal 8, @reader.num_read_count
+  end
+
+  def test_multiple_bad_input_second_number
+    @reader.responses = %w[23 nan nan 2 1]
+    assert_equal 25, calculator(@reader, @writer)
+    assert_equal 4, @reader.num_read_count
+  end
+
+  def test_bad_input_both_first_and_second
+    @reader.responses = %w[nan 23 nan nan 2 1]
+    assert_equal 25, calculator(@reader, @writer)
+    assert_equal 5, @reader.num_read_count
   end
 
   def test_noop
