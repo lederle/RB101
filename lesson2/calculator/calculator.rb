@@ -3,29 +3,37 @@
 require 'pry'
 
 def calculator(reader = Reader, writer = Writer)
+  ret = []
   writer.display_banner
-  writer.ask_for_number(:first)
-  until (num1 = reader.read_num)
-    writer.display_invalid_number
+  loop do
     writer.ask_for_number(:first)
-  end
-  writer.ask_for_number(:second)
-  until (num2 = reader.read_num)
-    writer.display_invalid_number
+    until (num1 = reader.read_num)
+      writer.display_invalid_number
+      writer.ask_for_number(:first)
+    end
     writer.ask_for_number(:second)
+    until (num2 = reader.read_num)
+      writer.display_invalid_number
+      writer.ask_for_number(:second)
+    end
+    writer.ask_for_operation
+    operation = reader.read_op
+    res = case operation
+          when '1'
+            writer.display_result calculate(num1, num2, :+)
+          when '2'
+            writer.display_result calculate(num1, num2, :-)
+          when '3'
+            writer.display_result calculate(num1, num2, :*)
+          when '4'
+            writer.display_result calculate(num1, num2, :/)
+          end
+    ret.push(res)
+    writer.ask_for_new_calc
+    new_calc = reader.read_new_calc
+    break unless new_calc == 'y'
   end
-  writer.ask_for_operation
-  operation = reader.read_op
-  case operation
-  when '1'
-    writer.display_result calculate(num1, num2, :+)
-  when '2'
-    writer.display_result calculate(num1, num2, :-)
-  when '3'
-    writer.display_result calculate(num1, num2, :*)
-  when '4'
-    writer.display_result calculate(num1, num2, :/)
-  end
+  ret
 end
 
 def calculate(num1, num2, oper)
@@ -53,6 +61,10 @@ class Reader
 
   def self.read_op(i_stream = $stdin)
     i_stream.gets.chomp
+  end
+
+  def self.read_new_calc(i_stream = $stdin)
+    i_stream.gets.chomp.downcase
   end
 end
 
@@ -92,6 +104,10 @@ class Writer
   def self.display_invalid_number(o_stream = $stdout)
     o_stream.puts decorate("Hmm... that doesn't look like a valid number")
   end
+
+  def self.ask_for_new_calc(o_stream = $stdout)
+    o_stream.puts decorate('Do you want to perform another calculation? (Y to calculate again)')
+  end
 end
 
 # This is a semi-hack for now, it creates a private
@@ -128,6 +144,11 @@ class ReaderTest < Minitest::Test
     Reader.read_op @stream
   end
 
+  def read_new_calc(input)
+    @stream = StringIO.new input
+    Reader.read_new_calc @stream
+  end
+
   def test_read_a_number
     assert_equal '10', read_num('10')
   end
@@ -146,6 +167,22 @@ class ReaderTest < Minitest::Test
 
   def test_read_an_op
     assert_equal '1', read_op('1')
+  end
+
+  def test_read_a_no_op
+    assert_equal '11', read_op('11')
+  end
+
+  def test_read_new_calc_yes
+    assert_equal 'y', read_new_calc('y')
+  end
+
+  def test_read_new_calc_capital_y
+    assert_equal 'y', read_new_calc('Y')
+  end
+
+  def test_read_new_calc_no
+    assert_equal 'n', read_new_calc('n')
   end
 end
 
@@ -216,6 +253,15 @@ class WriterTest < Minitest::Test
     OUT
     assert_equal expected, @stream.read
   end
+
+  def test_ask_for_another_calculation
+    @writer.ask_for_new_calc @stream
+    @stream.rewind
+    expected = <<~OUT
+      => Do you want to perform another calculation? (Y to calculate again)
+    OUT
+    assert_equal expected, @stream.read
+  end
 end
 
 # Test the calculator; I consider these
@@ -235,57 +281,57 @@ class CalculatorTest < Minitest::Test
 
   def test_happy
     @reader.responses = %w[1 2 1]
-    assert_equal 3, calculator(@reader, @writer)
+    assert_equal [3], calculator(@reader, @writer)
   end
 
   def test_subtract
     @reader.responses = %w[23 12 2]
-    assert_equal 11, calculator(@reader, @writer)
+    assert_equal [11], calculator(@reader, @writer)
   end
 
   def test_product
     @reader.responses = %w[23 2 3]
-    assert_equal 46, calculator(@reader, @writer)
+    assert_equal [46], calculator(@reader, @writer)
   end
 
   def test_quotient
     @reader.responses = %w[23 2 4]
-    assert_equal 11.5, calculator(@reader, @writer)
+    assert_equal [11.5], calculator(@reader, @writer)
   end
 
   def test_bad_input_first_number
     @reader.responses = %w[nan 23 2 1]
-    assert_equal 25, calculator(@reader, @writer)
+    assert_equal [25], calculator(@reader, @writer)
     assert_equal 3, @reader.num_read_count
   end
 
   def test_bad_input_second_number
     @reader.responses = %w[23 nan 2 1]
-    assert_equal 25, calculator(@reader, @writer)
+    assert_equal [25], calculator(@reader, @writer)
     assert_equal 3, @reader.num_read_count
   end
 
   def test_multiple_bad_input_first_number
     @reader.responses = %w[ds sdf sdf sdf ff nan 23 2 1]
-    assert_equal 25, calculator(@reader, @writer)
+    assert_equal [25], calculator(@reader, @writer)
     assert_equal 8, @reader.num_read_count
   end
 
   def test_multiple_bad_input_second_number
     @reader.responses = %w[23 nan nan 2 1]
-    assert_equal 25, calculator(@reader, @writer)
+    assert_equal [25], calculator(@reader, @writer)
     assert_equal 4, @reader.num_read_count
   end
 
   def test_bad_input_both_first_and_second
     @reader.responses = %w[nan 23 nan nan 2 1]
-    assert_equal 25, calculator(@reader, @writer)
+    assert_equal [25], calculator(@reader, @writer)
     assert_equal 5, @reader.num_read_count
   end
 
   def test_noop
     @reader.responses = %w[23 2 999]
-    assert_nil calculator(@reader, @writer)
+    assert_equal [nil], calculator(@reader, @writer)
   end
 
   def test_calculate
@@ -293,6 +339,21 @@ class CalculatorTest < Minitest::Test
     assert_equal 0, calculate('1', '1', :-)
     assert_equal 1, calculate('1', '1', :*)
     assert_equal 1.0, calculate('1', '1', :/)
+  end
+
+  def test_new_calc
+    @reader.responses = %w[1 1 1 y 1 1 1]
+    assert_equal [2, 2], calculator(@reader, @writer)
+  end
+
+  def test_new_calc_often
+    @reader.responses = %w[1 1 1 y 1 1 2 y 3 4 3 n]
+    assert_equal [2, 0, 12], calculator(@reader, @writer)
+  end
+
+  def test_no_new_calc
+    @reader.responses = %w[1 1 1 n]
+    assert_equal [2], calculator(@reader, @writer)
   end
 
   # Fake Reader class. To mimic a stream
@@ -320,6 +381,10 @@ class CalculatorTest < Minitest::Test
     def read_op
       responses.shift
     end
+
+    def read_new_calc
+      responses.shift
+    end
   end
 
   # Fake Writer class. We don't want to
@@ -339,5 +404,7 @@ class CalculatorTest < Minitest::Test
     end
 
     def display_invalid_number; end
+
+    def ask_for_new_calc; end
   end
 end
