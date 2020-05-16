@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
+require 'pry'
+
 def calculator(reader = Reader, writer = Writer)
   writer.display_banner
   writer.ask_for_number(:first)
-  num1 = reader.read_num
+  until (num1 = reader.read_num)
+    writer.display_invalid_number
+    writer.ask_for_number(:first)
+  end
   writer.ask_for_number(:second)
   num2 = reader.read_num
   writer.ask_for_operation
@@ -55,6 +60,7 @@ class << Reader
     num.to_i != 0
   end
 end
+
 # Writer is a helper class for the calculator
 # function. The default parameter is $stdout
 # but its main reason to be is to allow a
@@ -78,6 +84,10 @@ class Writer
   def self.display_result(o_stream = $stdout, res)
     o_stream.puts decorate("The result is #{res}")
     res
+  end
+
+  def self.display_invalid_number(o_stream = $stdout)
+    o_stream.puts decorate("Hmm... that doesn't look like a valid number")
   end
 end
 
@@ -121,6 +131,14 @@ class ReaderTest < Minitest::Test
 
   def test_read_not_a_number
     refute read_num('m')
+  end
+
+  def test_read_not_a_number_check_not_nil
+    refute_nil read_num('m')
+  end
+
+  def test_zero
+    refute read_num('0')
   end
 
   def test_read_an_op
@@ -186,6 +204,15 @@ class WriterTest < Minitest::Test
     assert_equal expected, @stream.read
     assert_equal 22, out
   end
+
+  def test_display_invalid_number
+    @writer.display_invalid_number @stream
+    @stream.rewind
+    expected = <<~OUT
+      => Hmm... that doesn't look like a valid number
+    OUT
+    assert_equal expected, @stream.read
+  end
 end
 
 # Test the calculator; I consider these
@@ -223,6 +250,18 @@ class CalculatorTest < Minitest::Test
     assert_equal 11.5, calculator(@reader, @writer)
   end
 
+  def test_bad_input_first_number
+    @reader.responses = %w[nan 23 2 1]
+    assert_equal 25, calculator(@reader, @writer)
+    assert_equal 3, @reader.num_read_count
+  end
+
+  def test_multiple_bad_input_first_number
+    @reader.responses = %w[ds sdf sdf sdf ff nan 23 2 1]
+    assert_equal 25, calculator(@reader, @writer)
+    assert_equal 8, @reader.num_read_count
+  end
+
   def test_noop
     @reader.responses = %w[23 2 999]
     assert_nil calculator(@reader, @writer)
@@ -240,10 +279,21 @@ class CalculatorTest < Minitest::Test
   # and individual inputs are shifted off
   # for use in the test.
   class MockReader
-    attr_accessor :responses
+    attr_accessor :responses, :num_read_count
 
+    def initialize
+      self.num_read_count = 0
+    end
+
+    # don't want logic here, but all I can see
+    # is either move Reader#valid? to calculator
+    # or this(?)
     def read_num
-      responses.shift
+      self.num_read_count += 1
+      input = responses.shift
+      return false if input.to_i.zero?
+
+      input
     end
 
     def read_op
@@ -266,5 +316,7 @@ class CalculatorTest < Minitest::Test
     def display_result(res)
       res
     end
+
+    def display_invalid_number; end
   end
 end
