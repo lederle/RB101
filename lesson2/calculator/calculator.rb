@@ -87,7 +87,7 @@ end
 # for calculator.
 class Writer
   def self.display_banner(o_stream = $stdout)
-    o_stream.puts decorate('Welcome to Calculator!')
+    o_stream.puts decorate('Welcome to Calculator! Enter your name:')
   end
 
   def self.ask_for_number(o_stream = $stdout, term)
@@ -209,7 +209,7 @@ class WriterTest < Minitest::Test
     @writer.display_banner @stream
     @stream.rewind
     expected = <<~OUT
-      => Welcome to Calculator!
+      => Welcome to Calculator! Enter your name:
     OUT
     assert_equal expected, @stream.read
   end
