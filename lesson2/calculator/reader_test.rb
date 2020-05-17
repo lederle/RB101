@@ -19,6 +19,11 @@ class ReaderTest < Minitest::Test
     Reader.read_new_calc @stream
   end
 
+  def read_name(input)
+    @stream = StringIO.new input
+    Reader.read_name @stream
+  end
+
   def test_read_number_given_a_number
     assert_equal '10', read_num("10\n")
   end
@@ -62,5 +67,12 @@ class ReaderTest < Minitest::Test
   def test_read_new_calc_given_newline
     assert_equal '', read_new_calc("\n")
   end
-end
 
+  def test_read_name_given_valid_name
+    assert_equal 'joe', read_name("joe\n")
+  end
+
+  def test_read_name_given_newline
+    refute read_name("\n")
+  end
+end

@@ -17,6 +17,12 @@ class Reader
   def self.read_new_calc(i_stream = $stdin)
     i_stream.gets.chomp.downcase
   end
+
+  def self.read_name(i_stream = $stdin)
+    input = i_stream.gets.chomp
+    return false if input.empty?
+    input
+  end
 end
 
 class << Reader
