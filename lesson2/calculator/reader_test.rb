@@ -49,7 +49,7 @@ class ReaderTest < Minitest::Test
   end
 
   def test_read_op_given_invalid_op
-    assert_equal '11', read_op("11\n")
+    refute read_op("11\n")
   end
 
   def test_read_new_calc_given_yes

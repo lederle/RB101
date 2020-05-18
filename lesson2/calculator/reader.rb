@@ -11,7 +11,10 @@ class Reader
   end
 
   def self.read_op(i_stream = $stdin)
-    i_stream.gets.chomp
+    input = i_stream.gets.chomp
+    return false unless %w[1 2 3 4].include?(input)
+
+    input
   end
 
   def self.read_new_calc(i_stream = $stdin)

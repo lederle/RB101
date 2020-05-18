@@ -24,7 +24,10 @@ class CalculatorTest < Minitest::Test
     end
 
     def read_op
-      responses.shift.chomp
+      input = responses.shift.chomp
+      return false unless %w[1 2 3 4].include?(input)
+
+      input
     end
 
     def read_new_calc

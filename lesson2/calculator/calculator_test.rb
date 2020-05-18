@@ -74,8 +74,8 @@ class CalculatorTest < Minitest::Test
   end
 
   def test_noop
-    @reader.responses = add_newline(%w[joe 23 2 999 n])
-    assert_equal [nil], calculator(@reader, @writer)
+    @reader.responses = add_newline(%w[joe 23 2 999 2 n])
+    assert_equal [21], calculator(@reader, @writer)
   end
 
   def test_calculate
@@ -98,5 +98,10 @@ class CalculatorTest < Minitest::Test
   def test_enter_invalid_name
     @reader.responses = add_newline(%W[#{''} joe 1 3 3 n])
     assert_equal [3], calculator(@reader, @writer)
+  end
+
+  def test_enter_invalid_operator
+    @reader.responses = add_newline(%w[joe 1 1 99 3 n])
+    assert_equal [1], calculator(@reader, @writer)
   end
 end

@@ -26,5 +26,7 @@ class CalculatorTest < Minitest::Test
     def display_name_error; end
 
     def display_greeting(name); end
+
+    def display_operator_error; end
   end
 end

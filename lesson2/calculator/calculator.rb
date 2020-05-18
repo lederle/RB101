@@ -25,7 +25,10 @@ def calculator(reader = Reader, writer = Writer)
       writer.ask_for_number(:second)
     end
     writer.ask_for_operation
-    operation = reader.read_op
+    until (operation = reader.read_op)
+      writer.display_operator_error
+    end
+    # binding.pry
     res = case operation
           when '1'
             writer.display_result calculate(num1, num2, :+)
@@ -39,7 +42,6 @@ def calculator(reader = Reader, writer = Writer)
     ret.push(res)
     writer.ask_for_new_calc
     new_calc = reader.read_new_calc
-    # binding.pry
     break unless new_calc == 'y'
   end
   writer.display_goodbye
