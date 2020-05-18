@@ -104,5 +104,14 @@ class WriterTest < Minitest::Test
     OUT
     assert_equal expected, @stream.read
   end
+
+  def test_display_message_for_invalid_operator
+    @writer.display_operator_error @stream
+    @stream.rewind
+    expected = <<~OUT
+      => Must choose 1, 2, 3 or 4
+    OUT
+    assert_equal expected, @stream.read
+  end
 end
 

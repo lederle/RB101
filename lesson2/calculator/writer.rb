@@ -42,6 +42,10 @@ class Writer
   def self.display_greeting(o_stream = $stdout, name)
     o_stream.puts decorate("Hi, #{name}")
   end
+
+  def self.display_operator_error(o_stream = $stdout)
+    o_stream.puts decorate('Must choose 1, 2, 3 or 4')
+  end
 end
 
 # This is a semi-hack for now, it creates a private
