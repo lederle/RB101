@@ -95,16 +95,6 @@ class CalculatorTest < Minitest::Test
     assert_equal [2, 0, 12], calculator(@reader, @writer)
   end
 
-  def test_no_new_calc
-    @reader.responses = add_newline(%w[joe 1 1 1 n])
-    assert_equal [2], calculator(@reader, @writer)
-  end
-
-  def test_enter_name
-    @reader.responses = add_newline(%w[joe 1 3 3 n])
-    assert_equal [3], calculator(@reader, @writer)
-  end
-
   def test_enter_invalid_name
     @reader.responses = add_newline(%W[#{''} joe 1 3 3 n])
     assert_equal [3], calculator(@reader, @writer)
