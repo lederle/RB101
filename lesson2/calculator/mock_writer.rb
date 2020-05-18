@@ -22,5 +22,9 @@ class CalculatorTest < Minitest::Test
     def ask_for_new_calc; end
 
     def display_goodbye; end
+
+    def display_name_error; end
+
+    def display_greeting(name); end
   end
 end

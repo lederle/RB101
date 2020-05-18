@@ -60,7 +60,7 @@ class WriterTest < Minitest::Test
     assert_equal 22, out
   end
 
-  def test_display_invalid_number
+  def test_display_message_for_invalid_number
     @writer.display_invalid_number @stream
     @stream.rewind
     expected = <<~OUT
@@ -83,6 +83,24 @@ class WriterTest < Minitest::Test
     @stream.rewind
     expected = <<~OUT
       => Thank you for using the calculator. Good bye!
+    OUT
+    assert_equal expected, @stream.read
+  end
+
+  def test_display_message_for_invalid_name
+    @writer.display_name_error @stream
+    @stream.rewind
+    expected = <<~OUT
+      => Be nice, enter your name
+    OUT
+    assert_equal expected, @stream.read
+  end
+
+  def test_display_greeting
+    @writer.display_greeting @stream, name
+    @stream.rewind
+    expected = <<~OUT
+      => Hi, #{name}
     OUT
     assert_equal expected, @stream.read
   end

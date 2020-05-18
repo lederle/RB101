@@ -17,18 +17,26 @@ class CalculatorTest < Minitest::Test
     # or this(?)
     def read_num
       self.num_read_count += 1
-      input = responses.shift
+      input = responses.shift.chomp
       return false if input.to_i.zero?
 
       input
     end
 
     def read_op
-      responses.shift
+      responses.shift.chomp
     end
 
     def read_new_calc
-      responses.shift
+      responses.shift.chomp
+    end
+
+    def read_name
+      input = responses.shift.chomp
+      return false if input.empty?
+
+      input
+
     end
   end
 end

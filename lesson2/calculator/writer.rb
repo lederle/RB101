@@ -34,6 +34,14 @@ class Writer
   def self.display_goodbye(o_stream = $stdout)
     o_stream.puts decorate('Thank you for using the calculator. Good bye!')
   end
+
+  def self.display_name_error(o_stream = $stdout)
+    o_stream.puts decorate('Be nice, enter your name')
+  end
+
+  def self.display_greeting(o_stream = $stdout, name)
+    o_stream.puts decorate("Hi, #{name}")
+  end
 end
 
 # This is a semi-hack for now, it creates a private

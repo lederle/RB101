@@ -9,6 +9,10 @@ require_relative 'writer'
 def calculator(reader = Reader, writer = Writer)
   ret = []
   writer.display_banner
+  until (name = reader.read_name)
+    writer.display_name_error
+  end
+  writer.display_greeting name
   loop do
     writer.ask_for_number(:first)
     until (num1 = reader.read_num)
@@ -35,6 +39,7 @@ def calculator(reader = Reader, writer = Writer)
     ret.push(res)
     writer.ask_for_new_calc
     new_calc = reader.read_new_calc
+    # binding.pry
     break unless new_calc == 'y'
   end
   writer.display_goodbye
