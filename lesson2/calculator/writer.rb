@@ -54,6 +54,10 @@ class Writer
   def self.display_operator_error(o_stream = $stdout)
     o_stream.puts decorate('Must choose 1, 2, 3 or 4')
   end
+
+  def self.display_operator_gerund_form(o_stream = $stdout, operator)
+    o_stream.puts decorate("#{operation_to_message(operator)} the two numbers...")
+  end
 end
 
 # This is a semi-hack for now, it creates a private
@@ -73,5 +77,18 @@ class << Writer
 
   def decorate(message)
     '=> ' + message
+  end
+
+  def operation_to_message(operator)
+    case operator
+    when '1'
+      'Adding'
+    when '2'
+      'Subtracting'
+    when '3'
+      'Multiplying'
+    when '4'
+      'Dividing'
+    end
   end
 end

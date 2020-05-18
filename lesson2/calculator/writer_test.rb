@@ -101,10 +101,11 @@ class WriterTest < Minitest::Test
   end
 
   def test_display_greeting
+    name = 'joe'
     @writer.display_greeting @stream, name
     @stream.rewind
     expected = <<~OUT
-      => Hi, #{name}
+      => Hi, joe
     OUT
     assert_equal expected, @stream.read
   end
@@ -117,5 +118,48 @@ class WriterTest < Minitest::Test
     OUT
     assert_equal expected, @stream.read
   end
-end
 
+  def test_display_operation_gerund_form
+    oper = '1'
+    @writer.display_operator_gerund_form(@stream, oper)
+    @stream.rewind
+    expected = <<~OUT
+      => Adding the two numbers...
+    OUT
+    assert_equal expected, @stream.read
+
+    #reset stream
+    @stream.truncate(0)
+    @stream.rewind
+
+    oper = '2'
+    @writer.display_operator_gerund_form(@stream, oper)
+    @stream.rewind
+    expected = <<~OUT
+      => Subtracting the two numbers...
+    OUT
+    assert_equal expected, @stream.read
+
+    @stream.truncate(0)
+    @stream.rewind
+
+    oper = '3'
+    @writer.display_operator_gerund_form(@stream, oper)
+    @stream.rewind
+    expected = <<~OUT
+      => Multiplying the two numbers...
+    OUT
+    assert_equal expected, @stream.read
+
+    @stream.truncate(0)
+    @stream.rewind
+
+    oper = '4'
+    @writer.display_operator_gerund_form(@stream, oper)
+    @stream.rewind
+    expected = <<~OUT
+      => Dividing the two numbers...
+    OUT
+    assert_equal expected, @stream.read
+  end
+end

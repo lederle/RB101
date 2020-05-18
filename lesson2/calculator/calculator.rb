@@ -29,6 +29,7 @@ def calculator(reader = Reader, writer = Writer)
       writer.display_operator_error
     end
     # binding.pry
+    writer.display_operator_gerund_form(operation)
     res = case operation
           when '1'
             writer.display_result calculate(num1, num2, :+)

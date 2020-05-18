@@ -28,5 +28,7 @@ class CalculatorTest < Minitest::Test
     def display_greeting(name); end
 
     def display_operator_error; end
+
+    def display_operator_gerund_form(_); end
   end
 end
