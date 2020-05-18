@@ -44,7 +44,11 @@ class WriterTest < Minitest::Test
     @writer.ask_for_operation @stream
     @stream.rewind
     expected = <<~OUT
-      => What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide
+      => What operation would you like to perform?
+         1) add
+         2) subtract
+         3) multiply
+         4) divide
     OUT
     assert_equal expected, @stream.read
   end

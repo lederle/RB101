@@ -5,6 +5,14 @@
 # It performs the puts-related operations
 # for calculator.
 class Writer
+  @operator_prompt = <<~OPER_PROMPT
+    What operation would you like to perform?
+       1) add
+       2) subtract
+       3) multiply
+       4) divide
+  OPER_PROMPT
+
   def self.display_banner(o_stream = $stdout)
     o_stream.puts decorate('Welcome to Calculator! Enter your name:')
   end
@@ -15,7 +23,7 @@ class Writer
   end
 
   def self.ask_for_operation(o_stream = $stdout)
-    o_stream.puts decorate('What operation would you like to perform? 1) add 2) subtract 3) multiply 4) divide')
+    o_stream.puts decorate(@operator_prompt)
   end
 
   def self.display_result(o_stream = $stdout, res)
