@@ -37,11 +37,11 @@ class ReaderTest < Minitest::Test
   end
 
   def test_read_number_check_not_nil
-    refute_nil read_num("k\n")
+    assert_nil read_num("k\n")
   end
 
   def test_read_number_given_zero
-    refute read_num("0\n")
+    assert_equal '0', read_num("0\n")
   end
 
   def test_read_op_given_valid_op

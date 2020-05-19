@@ -7,7 +7,7 @@
 class Reader
   def self.read_num(i_stream = $stdin)
     input = i_stream.gets.chomp
-    valid?(input) && input
+    input[/^\d+$/] && input
   end
 
   def self.read_op(i_stream = $stdin)
