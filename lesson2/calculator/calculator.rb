@@ -50,13 +50,16 @@ def calculator(reader = Reader, writer = Writer)
 end
 
 def calculate(num1, num2, oper)
-  if oper.to_s == '/'
-    num1 = num1.to_f
-    num2 = num2.to_f
-  else
-    num1 = num1.to_i
-    num2 = num2.to_i
+  # check if float rep mod 1 is zero to determine if int.
+  # Use lambda to keep convert method private to calculate.
+  convert = lambda do |num|
+    # check_if_int
+    (num.to_f % 1).zero? ? num.to_i : num.to_f
   end
+
+  num1 = convert.call(num1)
+  num2 = convert.call(num2)
+  num1 = oper.to_s == '/' ? num1.to_f : num1
   num1.send(oper, num2)
 end
 

@@ -24,7 +24,7 @@ class ReaderTest < Minitest::Test
     Reader.read_name @stream
   end
 
-  def test_read_number_given_a_number
+  def test_read_number_given_a_integer
     assert_equal '10', read_num("10\n")
   end
 
@@ -34,6 +34,19 @@ class ReaderTest < Minitest::Test
 
   def test_read_number_given_newline
     refute read_num("\n")
+  end
+
+  def test_read_number_given_float
+    assert_equal '1.1', read_num("1.1\n")
+  end
+
+  def test_float_corner_cases
+    assert_equal '.1', read_num(".1\n")
+    # Next is not a Float literal, but we will accept it for
+    # the application (need refinement on description here)
+    assert_equal '1.', read_num("1.\n")
+    assert_equal '.0', read_num(".0\n")
+    assert_equal '01.1', read_num("01.1\n")
   end
 
   def test_read_number_check_not_nil

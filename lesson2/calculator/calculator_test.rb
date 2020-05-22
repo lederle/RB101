@@ -43,6 +43,26 @@ class CalculatorTest < Minitest::Test
     assert_equal [11.5], calculator(@reader, @writer)
   end
 
+  def test_float
+    @reader.responses = add_newline(%w[joe 1.1 2.0 1 n])
+    assert_in_delta 3.1, calculator(@reader, @writer).pop
+  end
+
+  def test_mixed_type_operations_returns_float
+    @reader.responses = add_newline(%w[joe 1.1 2 1 n])
+    actual = calculator(@reader, @writer).pop
+    assert_in_delta 3.1, actual
+    assert_instance_of Float, actual
+  end
+
+  def test_convert_to_integer_if_float_is_integer
+    @reader.responses = add_newline(%w[joe 1.0 2 1 n])
+    actual = calculator(@reader, @writer).pop
+    assert_instance_of Integer, actual
+    assert_equal 3, actual
+
+  end
+
   def test_bad_input_first_number
     @reader.responses = add_newline(%w[joe nan 23 2 1 n])
     assert_equal [25], calculator(@reader, @writer)
@@ -83,6 +103,10 @@ class CalculatorTest < Minitest::Test
     assert_equal 0, calculate('1', '1', :-)
     assert_equal 1, calculate('1', '1', :*)
     assert_equal 1.0, calculate('1', '1', :/)
+    assert_in_delta 1.21, calculate('1.1', '1.1', :*)
+    assert_in_delta 1.0, calculate('1.1', '1.1', :/)
+    assert_in_delta 2.2, calculate('1.1', '1.1', :+)
+    assert_in_delta 0, calculate('1.1', '1.1', :-)
   end
 
   def test_new_calc
