@@ -1,0 +1,16 @@
+welcome: 'Welcome to Calculator! Enter your name:'
+get_number: "What's the %{term} number?"
+result: "The result is %{res}"
+get_operation: |
+  What operation would you like to perform?
+     1) add
+     2) subtract
+     3) multiply
+     4) divide
+number_error: "Hmm... that doesn't look like a valid number"
+get_new_calc: "Do you want to perform another calculation? (Y to calculate again)"
+goodbye: "Thank you for using the calculator. Good bye!"
+name_error: "Be nice, enter your name"
+say_name: "Hi, %{name}"
+operator_error: "Must choose 1, 2, 3 or 4"
+say_operator: "%{gerund} the two numbers..."

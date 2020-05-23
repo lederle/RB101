@@ -4,59 +4,56 @@
 # fake writer to by substituted during testing.
 # It performs the puts-related operations
 # for calculator.
+
+require 'yaml'
+
 class Writer
-  @operator_prompt = <<~OPER_PROMPT
-    What operation would you like to perform?
-       1) add
-       2) subtract
-       3) multiply
-       4) divide
-  OPER_PROMPT
+  MESSAGES = YAML.load_file('message_config.yml')
 
   def self.display_banner(o_stream = $stdout)
-    o_stream.puts decorate('Welcome to Calculator! Enter your name:')
+    o_stream.puts decorate(MESSAGES['welcome'])
   end
 
   def self.ask_for_number(o_stream = $stdout, term)
-    # Note to self: symbol auto converts to string
-    o_stream.puts decorate("What's the #{term} number?")
+    o_stream.puts decorate(format(MESSAGES['get_number'], term: term.to_s))
   end
 
   def self.ask_for_operation(o_stream = $stdout)
-    o_stream.puts decorate(@operator_prompt)
+    o_stream.puts decorate(MESSAGES['get_operation'])
   end
 
   def self.display_result(o_stream = $stdout, res)
-    o_stream.puts decorate("The result is #{res}")
+    o_stream.puts decorate(format(MESSAGES['result'], res: res))
     res
   end
 
   def self.display_invalid_number(o_stream = $stdout)
-    o_stream.puts decorate("Hmm... that doesn't look like a valid number")
+    o_stream.puts decorate(MESSAGES['number_error'])
   end
 
   def self.ask_for_new_calc(o_stream = $stdout)
-    o_stream.puts decorate('Do you want to perform another calculation? (Y to calculate again)')
+    o_stream.puts decorate(MESSAGES['get_new_calc'])
   end
 
   def self.display_goodbye(o_stream = $stdout)
-    o_stream.puts decorate('Thank you for using the calculator. Good bye!')
+    o_stream.puts decorate(MESSAGES['goodbye'])
   end
 
   def self.display_name_error(o_stream = $stdout)
-    o_stream.puts decorate('Be nice, enter your name')
+    o_stream.puts decorate(MESSAGES['name_error'])
   end
 
   def self.display_greeting(o_stream = $stdout, name)
-    o_stream.puts decorate("Hi, #{name}")
+    o_stream.puts decorate(format(MESSAGES['say_name'], name: name))
   end
 
   def self.display_operator_error(o_stream = $stdout)
-    o_stream.puts decorate('Must choose 1, 2, 3 or 4')
+    o_stream.puts decorate(MESSAGES['operator_error'])
   end
 
   def self.display_operator_gerund_form(o_stream = $stdout, operator)
-    o_stream.puts decorate("#{operation_to_message(operator)} the two numbers...")
+    o_stream.puts decorate(format(MESSAGES['say_operator'],
+                                  gerund: operation_to_message(operator)))
   end
 end
 
