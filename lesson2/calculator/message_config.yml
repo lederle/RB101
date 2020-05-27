@@ -1,16 +1,143 @@
-welcome: 'Welcome to Calculator! Enter your name:'
-get_number: "What's the %{term} number?"
-result: "The result is %{res}"
-get_operation: |
-  What operation would you like to perform?
-     1) add
-     2) subtract
-     3) multiply
-     4) divide
-number_error: "Hmm... that doesn't look like a valid number"
-get_new_calc: "Do you want to perform another calculation? (Y to calculate again)"
-goodbye: "Thank you for using the calculator. Good bye!"
-name_error: "Be nice, enter your name"
-say_name: "Hi, %{name}"
-operator_error: "Must choose 1, 2, 3 or 4"
-say_operator: "%{gerund} the two numbers..."
+en:
+  test: 'ruby'
+  welcome: 'Welcome to Calculator! Enter your name:'
+  get_number: "What's the %{term} number?"
+  first: 'first'
+  second: 'second'
+  result: "The result is %{res}"
+  get_operation: |
+    What operation would you like to perform?
+       1) add
+       2) subtract
+       3) multiply
+       4) divide
+  number_error: "Hmm... that doesn't look like a valid number"
+  get_new_calc: "Do you want to perform another calculation? (Y to calculate again)"
+  goodbye: "Thank you for using the calculator. Good bye!"
+  name_error: "Be nice, enter your name"
+  say_name: "Hi, %{name}"
+  operator_error: "Must choose 1, 2, 3 or 4"
+  say_operator: "%{gerund} the two numbers..."
+  adding: "Adding"
+  subtracting: "Subtracting"
+  multiplying: "Multiplying"
+  dividing: "Dividing"
+fr:
+  test: 'rubis'
+  welcome: 'Bienvenue dans la calculatrice! Entrez votre nom:'
+  get_number: "Quel est le %{term} numéro?"
+  first: 'premier'
+  second: 'deuxième'
+  result: "Le résultat est %{res}"
+  get_operation: |
+    Quelle opération arithmétique aimeriez-vous effectuer?
+       1) ajouter
+       2) soustraire
+       3) multiplier
+       4) divisier
+  number_error: "Hum... cela ne ressemble pas à un numéro valide"
+  get_new_calc: "Voulez-vous effectuer un autre calcul? (Y pour recalculer)"
+  goodbye: "Merci d'utiliser la calculatrice. Au revoir!"
+  name_error: "Soyez gentil, entrez votre nom"
+  say_name: "Salut, %{name}"
+  operator_error: "Doit choisir 1, 2, 3 ou 4"
+  say_operator: "%{gerund} les deux nombres..."
+  adding: "Ajout"
+  subtracting: "Soustraire"
+  multiplying: "Multiplier"
+  dividing: "Diviser"
+de:
+  test: 'Rubin'
+  welcome: 'Willkommen im Taschenrechner! Gib deinen Namen ein:'
+  get_number: "Was ist die %{term} Nummer?"
+  first: 'erste'
+  second: 'zweite'
+  result: "Das Ergebnis ist %{res}"
+  get_operation: |
+    Welche arithmetische Operation möchten Sie ausführen?
+       1) hinzufügen
+       2) subtrahieren
+       3) multiplizieren
+       4) teilen
+  number_error: "Hm... das sieht nicht nach einer gültigen Nummer aus"
+  get_new_calc: "Möchten Sie eine weitere Berechnung durchführen? (Y, um erneut zu berechnen)"
+  goodbye: "Vielen Dank, dass Sie den Taschenrechner verwenden. Auf Wiedersehen!"
+  name_error: "Sei nett, gib deinen Namen ein"
+  say_name: "Hallo, %{name}"
+  operator_error: "Muss 1, 2, 3 oder 4 wählen"
+  say_operator: "%{gerund} der beiden Zahlen..."
+  adding: "Hinzufügen"
+  subtracting: "Subtrahieren"
+  multiplying: "Multiplizieren"
+  dividing: "Teilen"
+ko:
+  test: '루비'
+  welcome: '계산기에 오신 것을 환영합니다! 당신의 이름을 입력:'
+  get_number: "%{term} 번째 숫자는 무엇입니까?"
+  first: '첫'
+  second: '두'
+  result: "결과는 %{res}"
+  get_operation: |
+      어떤 작업을 수행 하시겠습니까?
+         1) 더하기
+         2) 빼기
+         3) 곱하기
+         4) 나누다
+  number_error: "음 ... 유효한 숫자가 아닌 것 같습니다"
+  get_new_calc: "다른 계산을 수행 하시겠습니까 (예 : 다시 계산)"
+  goodbye: "계산기를 이용해 주셔서 감사합니다. 안녕!"
+  name_error: "좋아, 이름을 입력 해"
+  say_name: "안녕 %{name}"
+  operator_error: "1, 2, 3 또는 4를 선택해야합니다"
+  say_operator: "두 숫자를 %{gerund}..."
+  adding: "더함"
+  subtracting: "빼기"
+  multiplying: "곱하면"
+  dividing: "나누다"
+
+it:
+  test: 'rubino'
+  welcome: 'Benvenuti nella calcolatrice! Inserisci il tuo nome'
+  get_number: "What's the %{term} number?"
+  first: 'first'
+  second: 'second'
+  result: "Il risultato è %{res}"
+  get_operation: |
+    What operation would you like to perform?
+       1) add
+       2) subtract
+       3) multiply
+       4) divide
+  number_error: "Hmm... that doesn't look like a valid number"
+  get_new_calc: "Do you want to perform another calculation? (Y to calculate again)"
+  goodbye: "Thank you for using the calculator. Good bye!"
+  name_error: "Be nice, enter your name"
+  say_name: "Hi, %{name}"
+  operator_error: "Must choose 1, 2, 3 or 4"
+  say_operator: "%{gerund} the two numbers..."
+  adding: "Ajout"
+  subtracting: "Soustraire"
+  multiplying: "Multiplier"
+  dividing: "Diviser"
+se:
+  test: 'rubin'
+  welcome: 'Välkommen till miniräknaren! Ange ditt namn'
+  get_number: "What's the %{term} number?"
+  result: "Resultatet är %{res}"
+  get_operation: |
+    What operation would you like to perform?
+       1) add
+       2) subtract
+       3) multiply
+       4) divide
+  number_error: "Hmm... that doesn't look like a valid number"
+  get_new_calc: "Do you want to perform another calculation? (Y to calculate again)"
+  goodbye: "Thank you for using the calculator. Good bye!"
+  name_error: "Be nice, enter your name"
+  say_name: "Hi, %{name}"
+  operator_error: "Must choose 1, 2, 3 or 4"
+  say_operator: "%{gerund} the two numbers..."
+  adding: "Ajout"
+  subtracting: "Soustraire"
+  multiplying: "Multiplier"
+  dividing: "Diviser"

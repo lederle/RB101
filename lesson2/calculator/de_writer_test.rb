@@ -5,134 +5,135 @@ require_relative 'writer'
 # to fake $stdout. Much of the goings-on
 # here seem useless, or simply testing
 # the IO functionality, but if you testing
-# first, these tests form a "are the messages
+# first, theses tests form a "are the messages
 # as wanted" spec of sorts.
-class WriterTest < Minitest::Test
+class GermanWriterTest < Minitest::Test
   def setup
     @stream = StringIO.new
     @writer = Writer
-    @writer.change_lang('en')
+    @writer.change_lang('de')
   end
 
-  def test_english
-    @writer.change_lang('en')
+  def test_german
+    @writer.change_lang('de')
     @writer.ruby @stream
     @stream.rewind
-    assert_equal "=> ruby\n", @stream.read
+    assert_equal "=> Rubin\n", @stream.read
   end
 
-  def test_display_banner
+  def test_de_display_banner
     @writer.display_banner @stream
     @stream.rewind
     expected = <<~OUT
-      => Welcome to Calculator! Enter your name:
+      => Willkommen im Taschenrechner! Gib deinen Namen ein:
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_ask_for_first_number
+  def test_de_ask_for_first_number
     @writer.ask_for_number @stream, :first
     @stream.rewind
     expected = <<~OUT
-      => What's the first number?
+      => Was ist die erste Nummer?
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_ask_for_second_number
+  def test_de_ask_for_second_number
     @writer.ask_for_number @stream, :second
     @stream.rewind
     expected = <<~OUT
-      => What's the second number?
+      => Was ist die zweite Nummer?
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_ask_for_operation
+  def test_de_ask_for_operation
     @writer.ask_for_operation @stream
     @stream.rewind
     expected = <<~OUT
-      => What operation would you like to perform?
-         1) add
-         2) subtract
-         3) multiply
-         4) divide
+      => Welche arithmetische Operation möchten Sie ausführen?
+         1) hinzufügen
+         2) subtrahieren
+         3) multiplizieren
+         4) teilen
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_display_result
+  def test_de_display_result
     res = 22
     out = @writer.display_result @stream, res
     @stream.rewind
     expected = <<~OUT
-      => The result is 22
+      => Das Ergebnis ist 22
     OUT
     assert_equal expected, @stream.read
     assert_equal 22, out
   end
 
-  def test_display_message_for_invalid_number
+  def test_de_display_message_for_invalid_number
     @writer.display_invalid_number @stream
     @stream.rewind
     expected = <<~OUT
-      => Hmm... that doesn't look like a valid number
+      => Hm... das sieht nicht nach einer gültigen Nummer aus
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_ask_for_another_calculation
+  def test_de_ask_for_another_calculation
     @writer.ask_for_new_calc @stream
     @stream.rewind
     expected = <<~OUT
-      => Do you want to perform another calculation? (Y to calculate again)
+      => Möchten Sie eine weitere Berechnung durchführen? (Y, um erneut zu berechnen)
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_display_goodbye
+  def test_de_display_goodbye
     @writer.display_goodbye @stream
     @stream.rewind
     expected = <<~OUT
-      => Thank you for using the calculator. Good bye!
+      => Vielen Dank, dass Sie den Taschenrechner verwenden. Auf Wiedersehen!
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_display_message_for_invalid_name
+  def test_de_display_message_for_invalid_name
     @writer.display_name_error @stream
     @stream.rewind
     expected = <<~OUT
-      => Be nice, enter your name
+      => Sei nett, gib deinen Namen ein
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_display_greeting
-    name = 'joe'
+  def test_de_display_greeting
+    name = 'josef'
     @writer.display_greeting @stream, name
     @stream.rewind
     expected = <<~OUT
-      => Hi, joe
+      => Hallo, josef
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_display_message_for_invalid_operator
+  def test_de_display_message_for_invalid_operator
     @writer.display_operator_error @stream
     @stream.rewind
     expected = <<~OUT
-      => Must choose 1, 2, 3 or 4
+      => Muss 1, 2, 3 oder 4 wählen
     OUT
     assert_equal expected, @stream.read
   end
 
-  def test_display_operation_gerund_form
+  def test_de_display_operation_gerund_form
     oper = '1'
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
+    # les or des?
     expected = <<~OUT
-      => Adding the two numbers...
+      => Hinzufügen der beiden Zahlen...
     OUT
     assert_equal expected, @stream.read
 
@@ -144,7 +145,7 @@ class WriterTest < Minitest::Test
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
     expected = <<~OUT
-      => Subtracting the two numbers...
+      => Subtrahieren der beiden Zahlen...
     OUT
     assert_equal expected, @stream.read
 
@@ -154,8 +155,9 @@ class WriterTest < Minitest::Test
     oper = '3'
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
+    # check trans., prob wrong
     expected = <<~OUT
-      => Multiplying the two numbers...
+      => Multiplizieren der beiden Zahlen...
     OUT
     assert_equal expected, @stream.read
 
@@ -165,8 +167,9 @@ class WriterTest < Minitest::Test
     oper = '4'
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
+    # check trans., prob wrong
     expected = <<~OUT
-      => Dividing the two numbers...
+      => Teilen der beiden Zahlen...
     OUT
     assert_equal expected, @stream.read
   end

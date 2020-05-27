@@ -6,54 +6,72 @@
 # for calculator.
 
 require 'yaml'
+require 'pry'
 
 class Writer
   MESSAGES = YAML.load_file('message_config.yml')
 
+  # use class instance variable
+  @lang = 'ko'
+  class << self # all self methods could be in here
+    attr_accessor :lang
+  end
+
+  def self.change_lang(a_lang)
+    @lang = a_lang
+  end
+
+  def self.ruby(o_stream = $stdout)
+    write_to_stream(o_stream, messages('test'))
+  end
+
   def self.display_banner(o_stream = $stdout)
-    o_stream.puts decorate(MESSAGES['welcome'])
+    write_to_stream(o_stream, messages('welcome'))
   end
 
   def self.ask_for_number(o_stream = $stdout, term)
-    o_stream.puts decorate(format(MESSAGES['get_number'], term: term.to_s))
+    write_to_stream(o_stream,
+                    messages('get_number', term: ordinal(term)))
   end
 
   def self.ask_for_operation(o_stream = $stdout)
-    o_stream.puts decorate(MESSAGES['get_operation'])
+    write_to_stream(o_stream, messages('get_operation'))
   end
 
   def self.display_result(o_stream = $stdout, res)
-    o_stream.puts decorate(format(MESSAGES['result'], res: res))
+    write_to_stream(o_stream,
+                    messages('result', res: res))
     res
   end
 
   def self.display_invalid_number(o_stream = $stdout)
-    o_stream.puts decorate(MESSAGES['number_error'])
+    write_to_stream(o_stream, messages('number_error'))
   end
 
   def self.ask_for_new_calc(o_stream = $stdout)
-    o_stream.puts decorate(MESSAGES['get_new_calc'])
+    write_to_stream(o_stream, messages('get_new_calc'))
   end
 
   def self.display_goodbye(o_stream = $stdout)
-    o_stream.puts decorate(MESSAGES['goodbye'])
+    write_to_stream(o_stream, messages('goodbye'))
   end
 
   def self.display_name_error(o_stream = $stdout)
-    o_stream.puts decorate(MESSAGES['name_error'])
+    write_to_stream(o_stream, messages('name_error'))
   end
 
   def self.display_greeting(o_stream = $stdout, name)
-    o_stream.puts decorate(format(MESSAGES['say_name'], name: name))
+    write_to_stream(o_stream, messages('say_name', name: name))
   end
 
   def self.display_operator_error(o_stream = $stdout)
-    o_stream.puts decorate(MESSAGES['operator_error'])
+    write_to_stream(o_stream, messages('operator_error'))
   end
 
   def self.display_operator_gerund_form(o_stream = $stdout, operator)
-    o_stream.puts decorate(format(MESSAGES['say_operator'],
-                                  gerund: operation_to_message(operator)))
+    write_to_stream(o_stream,
+                    messages('say_operator',
+                             gerund: operation_to_message(operator)))
   end
 end
 
@@ -79,13 +97,27 @@ class << Writer
   def operation_to_message(operator)
     case operator
     when '1'
-      'Adding'
+      Writer::MESSAGES[lang]['adding']
     when '2'
-      'Subtracting'
+      Writer::MESSAGES[lang]['subtracting']
     when '3'
-      'Multiplying'
+      Writer::MESSAGES[lang]['multiplying']
     when '4'
-      'Dividing'
+      Writer::MESSAGES[lang]['dividing']
     end
+  end
+
+  def ordinal(term)
+    Writer::MESSAGES[lang][term.to_s]
+  end
+
+  def write_to_stream(stream, streamlet)
+    stream.puts streamlet
+  end
+
+  def messages(key, interpolators = nil)
+    return decorate(Writer::MESSAGES[lang][key]) unless interpolators
+
+    decorate(format(Writer::MESSAGES[lang][key], interpolators))
   end
 end

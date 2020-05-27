@@ -7,25 +7,25 @@ require_relative 'writer'
 # the IO functionality, but if you testing
 # first, these tests form a "are the messages
 # as wanted" spec of sorts.
-class WriterTest < Minitest::Test
+class KoreanWriterTest < Minitest::Test
   def setup
     @stream = StringIO.new
     @writer = Writer
-    @writer.change_lang('en')
+    @writer.change_lang('ko')
   end
 
-  def test_english
-    @writer.change_lang('en')
+  def test_korean
+    @writer.change_lang('ko')
     @writer.ruby @stream
     @stream.rewind
-    assert_equal "=> ruby\n", @stream.read
+    assert_equal "=> 루비\n", @stream.read
   end
 
   def test_display_banner
     @writer.display_banner @stream
     @stream.rewind
     expected = <<~OUT
-      => Welcome to Calculator! Enter your name:
+      => 계산기에 오신 것을 환영합니다! 당신의 이름을 입력:
     OUT
     assert_equal expected, @stream.read
   end
@@ -34,7 +34,7 @@ class WriterTest < Minitest::Test
     @writer.ask_for_number @stream, :first
     @stream.rewind
     expected = <<~OUT
-      => What's the first number?
+      => 첫 번째 숫자는 무엇입니까?
     OUT
     assert_equal expected, @stream.read
   end
@@ -43,7 +43,7 @@ class WriterTest < Minitest::Test
     @writer.ask_for_number @stream, :second
     @stream.rewind
     expected = <<~OUT
-      => What's the second number?
+      => 두 번째 숫자는 무엇입니까?
     OUT
     assert_equal expected, @stream.read
   end
@@ -52,11 +52,11 @@ class WriterTest < Minitest::Test
     @writer.ask_for_operation @stream
     @stream.rewind
     expected = <<~OUT
-      => What operation would you like to perform?
-         1) add
-         2) subtract
-         3) multiply
-         4) divide
+      => 어떤 작업을 수행 하시겠습니까?
+         1) 더하기
+         2) 빼기
+         3) 곱하기
+         4) 나누다
     OUT
     assert_equal expected, @stream.read
   end
@@ -66,7 +66,7 @@ class WriterTest < Minitest::Test
     out = @writer.display_result @stream, res
     @stream.rewind
     expected = <<~OUT
-      => The result is 22
+      => 결과는 22
     OUT
     assert_equal expected, @stream.read
     assert_equal 22, out
@@ -76,7 +76,7 @@ class WriterTest < Minitest::Test
     @writer.display_invalid_number @stream
     @stream.rewind
     expected = <<~OUT
-      => Hmm... that doesn't look like a valid number
+      => 음 ... 유효한 숫자가 아닌 것 같습니다
     OUT
     assert_equal expected, @stream.read
   end
@@ -85,7 +85,7 @@ class WriterTest < Minitest::Test
     @writer.ask_for_new_calc @stream
     @stream.rewind
     expected = <<~OUT
-      => Do you want to perform another calculation? (Y to calculate again)
+      => 다른 계산을 수행 하시겠습니까 (예 : 다시 계산)
     OUT
     assert_equal expected, @stream.read
   end
@@ -94,7 +94,7 @@ class WriterTest < Minitest::Test
     @writer.display_goodbye @stream
     @stream.rewind
     expected = <<~OUT
-      => Thank you for using the calculator. Good bye!
+      => 계산기를 이용해 주셔서 감사합니다. 안녕!
     OUT
     assert_equal expected, @stream.read
   end
@@ -103,17 +103,18 @@ class WriterTest < Minitest::Test
     @writer.display_name_error @stream
     @stream.rewind
     expected = <<~OUT
-      => Be nice, enter your name
+      => 좋아, 이름을 입력 해
     OUT
     assert_equal expected, @stream.read
   end
 
   def test_display_greeting
-    name = 'joe'
+    skip
+    name = '병철'
     @writer.display_greeting @stream, name
     @stream.rewind
     expected = <<~OUT
-      => Hi, joe
+      => 안녕 병철
     OUT
     assert_equal expected, @stream.read
   end
@@ -122,7 +123,7 @@ class WriterTest < Minitest::Test
     @writer.display_operator_error @stream
     @stream.rewind
     expected = <<~OUT
-      => Must choose 1, 2, 3 or 4
+      => 1, 2, 3 또는 4를 선택해야합니다
     OUT
     assert_equal expected, @stream.read
   end
@@ -132,10 +133,9 @@ class WriterTest < Minitest::Test
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
     expected = <<~OUT
-      => Adding the two numbers...
+      => 두 숫자를 더함...
     OUT
     assert_equal expected, @stream.read
-
     # reset stream
     @stream.truncate(0)
     @stream.rewind
@@ -144,7 +144,7 @@ class WriterTest < Minitest::Test
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
     expected = <<~OUT
-      => Subtracting the two numbers...
+      => 두 숫자를 빼기...
     OUT
     assert_equal expected, @stream.read
 
@@ -155,7 +155,7 @@ class WriterTest < Minitest::Test
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
     expected = <<~OUT
-      => Multiplying the two numbers...
+      => 두 숫자를 곱하면...
     OUT
     assert_equal expected, @stream.read
 
@@ -166,7 +166,7 @@ class WriterTest < Minitest::Test
     @writer.display_operator_gerund_form(@stream, oper)
     @stream.rewind
     expected = <<~OUT
-      => Dividing the two numbers...
+      => 두 숫자를 나누다...
     OUT
     assert_equal expected, @stream.read
   end

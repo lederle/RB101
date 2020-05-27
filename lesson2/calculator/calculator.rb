@@ -6,6 +6,8 @@ require_relative 'writer'
 
 # do arithmetic on two numbers, over and over
 # if you want
+
+LANG = 'en'
 def calculator(reader = Reader, writer = Writer)
   ret = []
   writer.display_banner
