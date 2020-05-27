@@ -1,0 +1,2 @@
+class MockWriter
+end
